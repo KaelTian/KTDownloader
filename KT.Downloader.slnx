@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="KT.Downloader.Cli.Tests/KT.Downloader.Cli.Tests.csproj" />
+  <Project Path="KT.Downloader.Cli/KT.Downloader.Cli.csproj" />
+</Solution>
