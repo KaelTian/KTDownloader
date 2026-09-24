@@ -152,8 +152,7 @@ public sealed class HttpFileDownloader : IFileDownloader
         while (true)
         {
             var read = await input.ReadAsync(buffer, cancellationToken);
-            if (read == 0)
-                break;
+            if (read == 0) break;
 
             // 最后一块通常不满，只写实际读到的那么多
             await output.WriteAsync(buffer.AsMemory(0, read), cancellationToken);

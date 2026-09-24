@@ -2,4 +2,5 @@
   <Project Path="../../tmp/ktdl-cancel-harness/ktdl-cancel-harness.csproj" />
   <Project Path="KT.Downloader.Cli.Tests/KT.Downloader.Cli.Tests.csproj" />
   <Project Path="KT.Downloader.Cli/KT.Downloader.Cli.csproj" />
+  <Project Path="KT.Downloader.WinForms/KT.Downloader.WinForms.csproj" />
 </Solution>
