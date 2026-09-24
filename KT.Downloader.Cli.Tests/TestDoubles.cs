@@ -154,13 +154,35 @@ internal sealed class ChunkThenFailStream : Stream
     public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
 }
 
-internal sealed class CollectingProgress : IProgress<DownloadProgress>
+internal sealed class CollectingProgress<T> : IProgress<T>
 {
-    private readonly List<DownloadProgress> _reports;
+    private readonly List<T> _reports;
 
-    public CollectingProgress(List<DownloadProgress> reports) => _reports = reports;
+    public CollectingProgress(List<T> reports) => _reports = reports;
 
-    public void Report(DownloadProgress value) => _reports.Add(value);
+    public void Report(T value) => _reports.Add(value);
+}
+
+internal sealed class RecordingFileDownloader : IFileDownloader
+{
+    private readonly Func<DownloadRequest, DownloadResult> _respond;
+
+    public RecordingFileDownloader(Func<DownloadRequest, DownloadResult> respond) => _respond = respond;
+
+    public List<DownloadRequest> Requests { get; } = [];
+
+    public Task<DownloadResult> DownloadAsync(
+        DownloadRequest request,
+        CancellationToken cancellationToken,
+        IProgress<DownloadProgress>? progress = null)
+    {
+        Requests.Add(request);
+
+        // 起手报一次，好让批处理层的进度转发有东西可观察。
+        progress?.Report(new DownloadProgress(0, 100));
+
+        return Task.FromResult(_respond(request));
+    }
 }
 
 internal sealed class FakeTimeProvider : TimeProvider

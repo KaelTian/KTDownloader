@@ -33,6 +33,15 @@ public sealed class LocalPathMapperTests
     }
 
     [Fact]
+    public void MapTo_HandlesADriveRootAsTheTargetDirectory()
+    {
+        // 根就是 "D:\" 时，末尾那个分隔符是根的一部分，边界不能再补一个
+        var mapper = new LocalPathMapper(@"D:\");
+
+        Assert.Equal(@"D:\L1\a.jpg", mapper.MapTo("L1/a.jpg"));
+    }
+
+    [Fact]
     public void MapTo_AcceptsBackslashSeparators()
     {
         var mapper = new LocalPathMapper(Root);

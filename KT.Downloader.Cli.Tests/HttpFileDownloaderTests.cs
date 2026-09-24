@@ -203,7 +203,7 @@ public sealed class HttpFileDownloaderTests : IDisposable
         var result = await downloader.DownloadAsync(
             Request(PathFor(FileName)),
             CancellationToken.None,
-            new CollectingProgress(reports));
+            new CollectingProgress<DownloadProgress>(reports));
 
         Assert.IsType<DownloadResult.Completed>(result);
         Assert.True(reports.Count > 1, "至少要报告不止一次，否则不算边下边报。");
@@ -292,7 +292,7 @@ public sealed class HttpFileDownloaderTests : IDisposable
         await downloader.DownloadAsync(
             Request(outputPath, resume: true),
             CancellationToken.None,
-            new CollectingProgress(reports));
+            new CollectingProgress<DownloadProgress>(reports));
 
         Assert.Equal(400, reports[0].BytesReceived);
         Assert.Equal(1000, reports[^1].BytesReceived);
